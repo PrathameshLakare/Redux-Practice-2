@@ -32,6 +32,23 @@ app.post("/movies", async (req, res) => {
   }
 });
 
+app.post("/movies/:movieId", async (req, res) => {
+  try {
+    const updatedMovie = await Movies.findByIdAndUpdate(
+      req.params.movieId,
+      req.body,
+      { new: true },
+    );
+    if (updatedMovie) {
+      res.json({ message: "Movie updated successfully.", movie: updatedMovie });
+    } else {
+      res.status(404).json({ error: "Movie not found" });
+    }
+  } catch (error) {
+    res.status(500).json({ error: "Internal Server Error" });
+  }
+});
+
 app.delete("/movies/:movieId", async (req, res) => {
   try {
     const deletedMovie = await Movies.findByIdAndDelete(req.params.movieId);
